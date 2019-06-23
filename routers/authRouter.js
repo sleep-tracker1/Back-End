@@ -1,17 +1,12 @@
 require("dotenv").config();
 
-const axios = require("axios");
+const authRouter = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("../data/dbConfig");
 const secret = process.env.JWT_SECRET;
 
-module.exports = server => {
-  server.post("/register", register);
-  server.post("/login", login);
-};
-
-function register(req, res) {
+authRouter.post("/register", async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -22,7 +17,7 @@ function register(req, res) {
 
   const hash = bcrypt.hashSync(password, 10);
 
-  db("users")
+  await db("users")
     .insert({ username, password: hash })
     .then(([id]) => {
       res.status(201).json({
@@ -33,9 +28,9 @@ function register(req, res) {
     .catch(error => {
       res.status(500).json(error);
     });
-}
+});
 
-function login(req, res) {
+authRouter.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -44,7 +39,7 @@ function login(req, res) {
     });
   }
 
-  db("users")
+  await db("users")
     .where({ username })
     .first()
     .then(user => {
@@ -61,7 +56,7 @@ function login(req, res) {
     .catch(error => {
       res.status(500).json(error);
     });
-}
+});
 
 function genToken(user) {
   const payload = {
@@ -73,3 +68,5 @@ function genToken(user) {
   };
   return jwt.sign(payload, secret, options);
 }
+
+module.exports = authRouter;
