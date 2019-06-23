@@ -4,6 +4,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const authRouter = require("../routers/authRouter");
+const timesRouter = require("../routers/timesRouter");
 
 const server = express();
 
@@ -17,5 +18,6 @@ server.get("/", (req, res) => {
 });
 
 server.use("/api/auth", authRouter);
+server.use("/api/times", timesRouter);
 
 module.exports = server;
