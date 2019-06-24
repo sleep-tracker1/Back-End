@@ -65,7 +65,7 @@ timesRouter.get("/:id/sleep-averages", async (req, res) => {
   try {
     const logs = await db("sleep_times").where({ user_id });
 
-    if (!logs) {
+    if (logs.length === 0) {
       res.status(404).json({
         message: "There were no sleep records"
       });
