@@ -10,9 +10,9 @@ exports.up = function(knex) {
       .onDelete("CASCADE")
       .onUpdate("CASCADE");
     table.string("sleep_date", 128);
-    table.integer("start_time", 12);
-    table.integer("end_time", 12);
-    table.integer("duration", 12);
+    table.integer("start_time", 14);
+    table.integer("end_time", 14);
+    table.integer("duration", 14);
     table.integer("rating", 4);
   });
 };
